@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routes import sha_routes
+from .routes import api_routes
 
 app = FastAPI(
     title="SHA-2 Hashing Service",
@@ -7,4 +7,4 @@ app = FastAPI(
 )
 
 # Include the API routes from the routes module
-app.include_router(sha_routes.router)
+app.include_router(api_routes.router)
