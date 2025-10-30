@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # FastAPI Application Service
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # This tells our app how to connect to the MongoDB container
+      - MONGO_URI=mongodb://mongo:27017/
+    depends_on:
+      - mongo
+    volumes:
+      - ./app:/code/app # Mounts the app directory for live code reloading
+
+  # MongoDB Service
+  mongo:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
