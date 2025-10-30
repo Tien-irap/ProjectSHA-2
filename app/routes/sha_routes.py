@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from typing import List
 
 from ..services import sha_logic
-from ..models.schemas import TextHashRequest, TextHashResponse, FileHashResponse, HashRecord, HashCheckResponse
+from ..models.sha_models import TextHashRequest, TextHashResponse, FileHashResponse, HashRecord, HashCheckResponse
 
 router = APIRouter()
 
