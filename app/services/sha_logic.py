@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Dict, Any
 
 from ..core.db_connection import collection
-from ..models.schemas import TextHashRequest, HashRecord
+from ..models.sha_models import TextHashRequest, HashRecord
 
 # --- Core Hashing Functions ---
 
