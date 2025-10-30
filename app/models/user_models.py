@@ -7,7 +7,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     """Schema for creating a new user. Includes the password."""
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8, max_length=72)
 
 class UserInDB(UserBase):
     """Schema for user data as stored in the database, including the hashed password."""

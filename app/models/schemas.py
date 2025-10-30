@@ -27,3 +27,8 @@ class HashRecord(BaseModel):
     algorithm: str
     hash: str
     timestamp: datetime
+
+class HashCheckResponse(BaseModel):
+    """Response model for the hash comparison check."""
+    match: bool
+    message: str

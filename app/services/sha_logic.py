@@ -43,6 +43,28 @@ def hash_file_chunks(file: UploadFile, algorithm: str = 'sha256') -> str:
     
     return hash_func.hexdigest()
 
+def hash_file_content(file: UploadFile, algorithm: str) -> str:
+    """Helper function to hash file content without storing it."""
+    hasher = hashlib.new(algorithm)
+    # Read file in chunks to handle large files efficiently
+    while chunk := file.file.read(8192):
+        hasher.update(chunk)
+    # Reset file pointer to the beginning in case it needs to be read again
+    file.file.seek(0)
+    return hasher.hexdigest()
+
+def verify_file_hash(file: UploadFile, known_hash: str, algorithm: str) -> bool:
+    """
+    Hashes an uploaded file and compares it to a known hash.
+    Returns True if they match, False otherwise.
+    """
+    # Calculate the hash of the newly uploaded file
+    calculated_hash = hash_file_content(file, algorithm)
+    
+    # Compare the calculated hash with the provided known hash
+    # Use a case-insensitive comparison as hash formats can vary
+    return calculated_hash.lower() == known_hash.lower()
+
 # --- Database Interaction Functions ---
 
 def create_and_store_text_hash(request: TextHashRequest) -> str:

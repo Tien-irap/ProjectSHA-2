@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from typing import List
 
 from ..services import sha_logic
-from ..models.schemas import TextHashRequest, TextHashResponse, FileHashResponse, HashRecord
+from ..models.schemas import TextHashRequest, TextHashResponse, FileHashResponse, HashRecord, HashCheckResponse
 
 router = APIRouter()
 
@@ -51,6 +51,30 @@ async def create_file_hash(
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/hash/check/", response_model=HashCheckResponse, summary="Verify File Integrity")
+async def check_file_hash(
+    file: UploadFile = File(...),
+    known_hash: str = Form(...),
+    algorithm: str = Form("sha256")
+) -> HashCheckResponse:
+    """
+    Verifies the integrity of an uploaded file against a known hash.
+
+    - Hashes the uploaded file using the specified algorithm.
+    - Compares the calculated hash to the provided 'known_hash'.
+    - Returns a boolean 'match' status and a confirmation message.
+    """
+    try:
+        is_match = sha_logic.verify_file_hash(file, known_hash, algorithm)
+        if is_match:
+            return HashCheckResponse(match=True, message="File integrity confirmed. The hashes match.")
+        else:
+            return HashCheckResponse(match=False, message="WARNING: File has been tampered with! The hashes do not match.")
+    except Exception as e:
+        # This could happen if an invalid algorithm is provided, for example.
+        raise HTTPException(status_code=400, detail=f"Could not process file verification. Error: {str(e)}")
+
 
 @router.get("/hashes/", response_model=List[HashRecord], summary="Retrieve Recent Hashes")
 async def get_all_hashes() -> List[HashRecord]:

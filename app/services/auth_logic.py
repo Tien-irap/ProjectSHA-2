@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
 
-from ..db.mongodb import get_db
+from ..core.db_connection import get_db
 from ..models.user_models import UserCreate, UserInDB
 
 # --- Configuration ---
@@ -14,7 +14,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # --- Password Hashing ---
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifies a plain password against a hashed password."""
