@@ -13,3 +13,7 @@ COLLECTION_NAME = "hash_records"
 client = pymongo.MongoClient(MONGO_CONNECTION_STRING)
 db = client[DB_NAME]
 collection = db[COLLECTION_NAME]
+
+def get_db():
+    """Returns the MongoDB database instance."""
+    return db
